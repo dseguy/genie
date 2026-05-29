@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Exakat\Generator;
+namespace Dseguy\Generator;
 
 /**
  * Yields all ordered arrangements of $length distinct characters drawn from $charset.

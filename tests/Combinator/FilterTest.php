@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Exakat\Generator\Tests\Combinator;
+namespace Dseguy\Generator\Tests\Combinator;
 
-use Exakat\Generator\Digits;
-use Exakat\Generator\Letters;
+use Dseguy\Generator\Digits;
+use Dseguy\Generator\Letters;
 use PHPUnit\Framework\TestCase;
 
 final class FilterTest extends TestCase

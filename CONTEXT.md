@@ -1,4 +1,4 @@
-# Context — `exakat/generator`
+# Context — `dseguy/genie`
 
 > Domain glossary. No implementation details. One sentence per term.
 

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Exakat\Generator\Combinator;
+namespace Dseguy\Generator\Combinator;
 
-use Exakat\Generator\AbstractGenerator;
-use Exakat\Generator\GeneratorInterface;
+use Dseguy\Generator\AbstractGenerator;
+use Dseguy\Generator\GeneratorInterface;
 
 /**
  * Yields the Cartesian product of two generators as flat tuples.

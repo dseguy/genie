@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Exakat\Generator;
+namespace Dseguy\Generator;
 
 /** @extends \IteratorAggregate<int, mixed> */
 interface GeneratorInterface extends \IteratorAggregate

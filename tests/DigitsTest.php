@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Exakat\Generator\Tests;
+namespace Dseguy\Generator\Tests;
 
-use Exakat\Generator\Digits;
+use Dseguy\Generator\Digits;
 use PHPUnit\Framework\TestCase;
 
 final class DigitsTest extends TestCase

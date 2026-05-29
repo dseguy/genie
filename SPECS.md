@@ -13,7 +13,7 @@ The driving use case is **general-purpose iteration**: when code needs to walk a
 
 | Key              | Value                  |
 |------------------|------------------------|
-| Packagist name   | `exakat/generator`     |
+| Packagist name   | `dseguy/genie`         |
 | PHP requirement  | `^8.2`                 |
 | Namespace        | `Exakat\Generator`     |
 

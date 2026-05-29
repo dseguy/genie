@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Exakat\Generator\Tests;
+namespace Dseguy\Generator\Tests;
 
-use Exakat\Generator\Permutations;
+use Dseguy\Generator\Permutations;
 use PHPUnit\Framework\TestCase;
 
 final class PermutationsTest extends TestCase

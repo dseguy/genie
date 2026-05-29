@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Exakat\\Generator\\": "src/"
+            "Dseguy\\Generator\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Exakat\\Generator\\Tests\\": "tests/"
+            "Dseguy\\Generator\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "stable"

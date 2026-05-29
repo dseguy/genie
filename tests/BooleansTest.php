@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Exakat\Generator\Tests;
+namespace Dseguy\Generator\Tests;
 
-use Exakat\Generator\Booleans;
+use Dseguy\Generator\Booleans;
 use PHPUnit\Framework\TestCase;
 
 final class BooleansTest extends TestCase

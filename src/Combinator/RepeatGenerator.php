@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Exakat\Generator\Combinator;
+namespace Dseguy\Generator\Combinator;
 
-use Exakat\Generator\AbstractGenerator;
-use Exakat\Generator\GeneratorInterface;
+use Dseguy\Generator\AbstractGenerator;
+use Dseguy\Generator\GeneratorInterface;
 
 /**
  * Yields all n-length sequences drawn from a single generator (G^n).

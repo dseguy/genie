@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Exakat\Generator;
+namespace Dseguy\Generator;
 
-use Exakat\Generator\Combinator\FilterGenerator;
-use Exakat\Generator\Combinator\MapGenerator;
-use Exakat\Generator\Combinator\MergeGenerator;
-use Exakat\Generator\Combinator\ProductGenerator;
-use Exakat\Generator\Combinator\RepeatGenerator;
+use Dseguy\Generator\Combinator\FilterGenerator;
+use Dseguy\Generator\Combinator\MapGenerator;
+use Dseguy\Generator\Combinator\MergeGenerator;
+use Dseguy\Generator\Combinator\ProductGenerator;
+use Dseguy\Generator\Combinator\RepeatGenerator;
 
 abstract class AbstractGenerator implements GeneratorInterface
 {

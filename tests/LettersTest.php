@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Exakat\Generator\Tests;
+namespace Dseguy\Generator\Tests;
 
-use Exakat\Generator\Letters;
+use Dseguy\Generator\Letters;
 use PHPUnit\Framework\TestCase;
 
 final class LettersTest extends TestCase

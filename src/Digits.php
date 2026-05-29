@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Exakat\Generator;
+namespace Dseguy\Generator;
 
 final class Digits extends AbstractGenerator
 {
