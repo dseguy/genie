@@ -1,6 +1,6 @@
 {
-    "name": "exakat/generator",
-    "description": "Systematic value generation for PHP — lazy, composable, fluent.",
+    "name": "dseguy/genie",
+    "description": "Systematic value generation for PHP: lazy, composable, fluent.",
     "type": "library",
     "license": "MIT",
     "keywords": ["generator", "iterator", "combinatorics", "testing", "values"],
