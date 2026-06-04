@@ -70,6 +70,18 @@ Generates boolean (and optionally null) values.
 | `Booleans::values()`   | `true`, `false`         |
 | `Booleans::withNull()` | `true`, `false`, `null` |
 
+### `Enums`
+
+Generates values derived from a PHP 8.1+ enum class passed as a class-string.
+
+| Factory method                  | Accepts          | Yields |
+|---------------------------------|------------------|--------|
+| `Enums::cases(string $class)`   | any enum         | the enum case objects (`\UnitEnum` instances), in declaration order |
+| `Enums::names(string $class)`   | any enum         | the case names as `string`, in declaration order |
+| `Enums::values(string $class)`  | backed enum only | the backing values (`int` or `string`), in declaration order |
+
+Throws `\InvalidArgumentException` at construction if `$class` is not an enum, or if `values()` is called on a pure (non-backed) enum. Yielded order matches `$class::cases()`.
+
 ---
 
 ## Terminal method
@@ -152,6 +164,7 @@ Letters::lower()->repeat(2)
 use Exakat\Generator\Letters;
 use Exakat\Generator\Digits;
 use Exakat\Generator\Booleans;
+use Exakat\Generator\Enums;
 use Exakat\Generator\Permutations;
 
 // All lowercase letters merged with digits — named variable via toIterator()
@@ -188,6 +201,26 @@ foreach ($codes as $s) {
 $bools = Booleans::withNull()->toIterator();
 foreach ($bools as $b) {
     // true, false, null
+}
+
+// Enum case objects
+enum Suit { case Hearts; case Diamonds; case Clubs; case Spades; }
+$cases = Enums::cases(Suit::class)->toIterator();
+foreach ($cases as $case) {
+    // Suit::Hearts, Suit::Diamonds, Suit::Clubs, Suit::Spades
+}
+
+// Enum names as strings
+$names = Enums::names(Suit::class)->toIterator();
+foreach ($names as $name) {
+    // 'Hearts', 'Diamonds', 'Clubs', 'Spades'
+}
+
+// Backed enum values
+enum Priority: int { case Low = 1; case Medium = 2; case High = 3; }
+$values = Enums::values(Priority::class)->toIterator();
+foreach ($values as $value) {
+    // 1, 2, 3
 }
 ```
 

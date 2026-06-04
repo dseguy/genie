@@ -82,6 +82,35 @@ foreach (Booleans::withNull() as $b) {
 }
 ```
 
+### `Enums`
+
+Yields values derived from a PHP 8.1+ enum. Three factory methods cover the three things callers typically need from an enum.
+
+| Factory method                  | Accepts          | Yields                                      |
+|---------------------------------|------------------|---------------------------------------------|
+| `Enums::cases(string $class)`   | any enum         | the enum case objects (`\UnitEnum` instances) |
+| `Enums::names(string $class)`   | any enum         | the case names as strings                   |
+| `Enums::values(string $class)`  | backed enum only | the backing values (`int` or `string`)      |
+
+```php
+enum Suit { case Hearts; case Diamonds; case Clubs; case Spades; }
+enum Priority: int { case Low = 1; case Medium = 2; case High = 3; }
+
+foreach (Enums::cases(Suit::class) as $case) {
+    // Suit::Hearts, Suit::Diamonds, Suit::Clubs, Suit::Spades
+}
+
+foreach (Enums::names(Suit::class) as $name) {
+    // 'Hearts', 'Diamonds', 'Clubs', 'Spades'
+}
+
+foreach (Enums::values(Priority::class) as $value) {
+    // 1, 2, 3
+}
+```
+
+Throws `InvalidArgumentException` if the class is not an enum, or if `values()` is called on a pure (non-backed) enum.
+
 ### `Permutations`
 
 Yields all ordered arrangements of `$length` **distinct** characters drawn from a charset. No character repeats within a single value.
@@ -264,6 +293,32 @@ foreach (Digits::range(0, count($roles) - 1)->product(Digits::range(0, count($st
 }
 ```
 
+### Exhaustive enum coverage in tests
+
+Iterate every case of an enum in a data provider so no case is accidentally omitted from test coverage.
+
+```php
+enum Status: string { case Active = 'active'; case Suspended = 'suspended'; case Pending = 'pending'; }
+
+public static function allStatuses(): iterable
+{
+    return Enums::cases(Status::class)->map(fn($s) => [$s]);
+}
+
+/** @dataProvider allStatuses */
+public function test_notification_is_sent_for_every_status(Status $status): void
+{
+    $this->assertTrue(Notifier::shouldNotify($status));
+}
+```
+
+```php
+// Verify a mapping covers every backing value
+foreach (Enums::values(Status::class) as $value) {
+    $this->assertArrayHasKey($value, StatusLabel::MAP);
+}
+```
+
 ### Slug / identifier collision detection
 
 Verify that a slug generator produces unique output across all inputs.
@@ -396,8 +451,19 @@ $codes = Permutations::of(2, 'abcdefghijklmnopqrstuvwxyz')
 use Dseguy\Generator\Letters;
 use Dseguy\Generator\Digits;
 use Dseguy\Generator\Booleans;
+use Dseguy\Generator\Enums;
 use Dseguy\Generator\Permutations;
 ```
+
+### Primitive generators
+
+| Class | Factory methods |
+|-------|----------------|
+| `Letters` | `lower()`, `upper()`, `all()` |
+| `Digits` | `all()`, `range(int $start, int $end, int $step = 1)` |
+| `Booleans` | `values()`, `withNull()` |
+| `Enums` | `cases(string $class)`, `names(string $class)`, `values(string $class)` |
+| `Permutations` | `of(int $length, string $charset)` |
 
 ### `GeneratorInterface`
 
