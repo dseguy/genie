@@ -111,6 +111,51 @@ foreach (Enums::values(Priority::class) as $value) {
 
 Throws `InvalidArgumentException` if the class is not an enum, or if `values()` is called on a pure (non-backed) enum.
 
+### `Collection`
+
+Wraps an arbitrary PHP array as a generator source. Keys are discarded; only values are yielded.
+
+| Factory method | Yields |
+|---|---|
+| `Collection::of(array $items)` | every value in `$items`, re-indexed from 0 |
+
+```php
+use Dseguy\Generator\Collection;
+
+foreach (Collection::of(['foo', 'bar', 'baz']) as $value) {
+    // 'foo', 'bar', 'baz'
+}
+
+// Compose freely with combinators
+Collection::of([1, 2, 3])->product(Booleans::values())
+// yields: [1, true], [1, false], [2, true], …
+```
+
+### `FromCallable`
+
+Wraps a **factory callable** that returns a `\Traversable` (generator, iterator, or iterator aggregate). The factory is invoked fresh on every iteration, making the source fully reusable and safe to use with all combinators.
+
+| Factory method | Accepts | Yields |
+|---|---|---|
+| `FromCallable::of(callable $factory)` | `callable(): \Traversable` | every value produced by the traversable, keys discarded |
+
+```php
+use Dseguy\Generator\FromCallable;
+
+// Wrap a generator function
+$source = FromCallable::of(fn() => (function () {
+    yield 'x';
+    yield 'y';
+    yield 'z';
+})());
+
+// Wrap a database cursor or any lazy iterator
+$rows = FromCallable::of(fn() => $db->query('SELECT id FROM items'));
+foreach ($rows->filter(fn($row) => $row['id'] > 100) as $row) { … }
+```
+
+> **Warning — infinite sources:** a factory that yields forever is valid with `filter()`, `map()`, and `merge()`, but will loop forever or exhaust memory inside `product()` or `repeat()`. There is currently no way to detect an infinite source at construction time; support for this is planned in a future version.
+
 ### `Permutations`
 
 Yields all ordered arrangements of `$length` **distinct** characters drawn from a charset. No character repeats within a single value.
@@ -274,21 +319,10 @@ foreach (Letters::lower() as $initial) {
 
 ```php
 // All combinations of role × status for permission matrix tests
-$roles   = ['admin', 'editor', 'viewer'];
-$statuses = ['active', 'suspended', 'pending'];
+$roles    = Collection::of(['admin', 'editor', 'viewer']);
+$statuses = Collection::of(['active', 'suspended', 'pending']);
 
-// Build a generator from an arbitrary list using merge + map
-$roleGen   = Letters::lower()->filter(fn($c) => in_array($c, ['a','e','v']))->map(fn($c) => match($c) {
-    'a' => 'admin', 'e' => 'editor', default => 'viewer'
-});
-```
-
-A simpler pattern when the domain is small — iterate the product of two PHP arrays:
-
-```php
-foreach (Digits::range(0, count($roles) - 1)->product(Digits::range(0, count($statuses) - 1)) as [$ri, $si]) {
-    $role   = $roles[$ri];
-    $status = $statuses[$si];
+foreach ($roles->product($statuses) as [$role, $status]) {
     // test every role × status combination
 }
 ```
@@ -452,6 +486,8 @@ use Dseguy\Generator\Letters;
 use Dseguy\Generator\Digits;
 use Dseguy\Generator\Booleans;
 use Dseguy\Generator\Enums;
+use Dseguy\Generator\Collection;
+use Dseguy\Generator\FromCallable;
 use Dseguy\Generator\Permutations;
 ```
 
@@ -463,6 +499,8 @@ use Dseguy\Generator\Permutations;
 | `Digits` | `all()`, `range(int $start, int $end, int $step = 1)` |
 | `Booleans` | `values()`, `withNull()` |
 | `Enums` | `cases(string $class)`, `names(string $class)`, `values(string $class)` |
+| `Collection` | `of(array $items)` |
+| `FromCallable` | `of(callable $factory)` |
 | `Permutations` | `of(int $length, string $charset)` |
 
 ### `GeneratorInterface`

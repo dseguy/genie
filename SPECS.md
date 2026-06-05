@@ -82,6 +82,26 @@ Generates values derived from a PHP 8.1+ enum class passed as a class-string.
 
 Throws `\InvalidArgumentException` at construction if `$class` is not an enum, or if `values()` is called on a pure (non-backed) enum. Yielded order matches `$class::cases()`.
 
+### `Collection`
+
+Wraps an arbitrary PHP array as a generator source. Array keys are discarded; only values are yielded (re-indexed from 0). Fully reusable: the stored values are iterated fresh on each call to `getIterator()`.
+
+| Factory method | Accepts | Yields |
+|---|---|---|
+| `Collection::of(array $items)` | any array | the array values, re-indexed sequentially |
+
+### `FromCallable`
+
+Wraps a **factory callable** that returns a `\Traversable`. The factory is invoked on every call to `getIterator()`, producing a fresh traversable each time. This makes the source fully reusable and composable with all combinators including `product()` and `repeat()`.
+
+Keys yielded by the traversable are discarded; only values are passed downstream.
+
+| Factory method | Accepts | Yields |
+|---|---|---|
+| `FromCallable::of(callable $factory)` | `callable(): \Traversable<mixed>` | values from the traversable, keys discarded |
+
+**Constraint — infinite sources:** a factory wrapping an infinite sequence is safe only with combinators that consume lazily one value at a time (`filter`, `map`, `merge`). Combinators that require full traversal of the source (`product`, `repeat`) will loop forever. Detection and safe handling of infinite sources is reserved for a future version.
+
 ---
 
 ## Terminal method
@@ -161,11 +181,13 @@ Letters::lower()->repeat(2)
 ## API examples
 
 ```php
-use Exakat\Generator\Letters;
-use Exakat\Generator\Digits;
-use Exakat\Generator\Booleans;
-use Exakat\Generator\Enums;
-use Exakat\Generator\Permutations;
+use Dseguy\Generator\Letters;
+use Dseguy\Generator\Digits;
+use Dseguy\Generator\Booleans;
+use Dseguy\Generator\Enums;
+use Dseguy\Generator\Collection;
+use Dseguy\Generator\FromCallable;
+use Dseguy\Generator\Permutations;
 
 // All lowercase letters merged with digits — named variable via toIterator()
 $alphanumeric = Letters::lower()->merge(Digits::all())->toIterator();
@@ -246,6 +268,8 @@ foreach ($values as $value) {
 ## Reserved for future versions (RFU)
 
 - **Generation order** — configurable ordering of Primitive output (ascending, descending, interleaved, shuffled). All Primitives use a single fixed natural order in v1.
+- **Infinite source detection** — a mechanism to flag or detect `FromCallable` factories that wrap infinite sequences, and to define which combinators are safe to compose with them.
+- **Key preservation in `FromCallable`** — an option to pass through the keys yielded by the factory's traversable rather than always re-indexing.
 
 ---
 
