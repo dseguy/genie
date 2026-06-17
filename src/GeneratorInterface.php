@@ -9,6 +9,8 @@ interface GeneratorInterface extends \IteratorAggregate
 {
     public function getIterator(): \Generator;
 
+    public function isInfinite(): bool;
+
     public function merge(GeneratorInterface ...$others): GeneratorInterface;
 
     public function product(GeneratorInterface ...$others): GeneratorInterface;
@@ -18,6 +20,8 @@ interface GeneratorInterface extends \IteratorAggregate
     public function map(callable $transform): GeneratorInterface;
 
     public function repeat(int $n): GeneratorInterface;
+
+    public function take(int $n): GeneratorInterface;
 
     public function toIterator(): \Iterator;
 }

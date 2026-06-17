@@ -22,7 +22,14 @@ final class ProductGenerator extends AbstractGenerator
     public function __construct(
         private readonly GeneratorInterface $left,
         private readonly GeneratorInterface $right,
-    ) {}
+    ) {
+        if ($left->isInfinite()) {
+            throw new \LogicException('Cannot use an infinite source as the left operand of product().');
+        }
+        if ($right->isInfinite()) {
+            throw new \LogicException('Cannot use an infinite source as the right operand of product().');
+        }
+    }
 
     public function getIterator(): \Generator
     {

@@ -26,6 +26,9 @@ final class RepeatGenerator extends AbstractGenerator
                 "Repeat count must be > 0, got {$n}."
             );
         }
+        if ($source->isInfinite()) {
+            throw new \LogicException('Cannot use an infinite source with repeat().');
+        }
     }
 
     public function getIterator(): \Generator

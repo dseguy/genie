@@ -4,3 +4,4 @@ composer.lock
 .phpunit.result.cache
 TODO.md
 coverage/
+.idea/

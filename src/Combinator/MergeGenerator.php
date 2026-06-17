@@ -21,6 +21,16 @@ final class MergeGenerator extends AbstractGenerator
         $this->sources = array_values($sources);
     }
 
+    public function isInfinite(): bool
+    {
+        foreach ($this->sources as $source) {
+            if ($source->isInfinite()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function getIterator(): \Generator
     {
         foreach ($this->sources as $source) {

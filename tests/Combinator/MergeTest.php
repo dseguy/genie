@@ -6,6 +6,7 @@ namespace Dseguy\Generator\Tests\Combinator;
 
 use Dseguy\Generator\Booleans;
 use Dseguy\Generator\Digits;
+use Dseguy\Generator\Integers;
 use Dseguy\Generator\Letters;
 use PHPUnit\Framework\TestCase;
 
@@ -53,5 +54,20 @@ final class MergeTest extends TestCase
         $second = iterator_to_array($merged->toIterator(), false);
 
         self::assertSame($first, $second);
+    }
+
+    public function testIsNotInfiniteWhenAllSourcesAreFinite(): void
+    {
+        self::assertFalse(Letters::lower()->merge(Digits::all())->isInfinite());
+    }
+
+    public function testIsInfiniteWhenFirstSourceIsInfinite(): void
+    {
+        self::assertTrue(Integers::natural()->merge(Letters::lower())->isInfinite());
+    }
+
+    public function testIsInfiniteWhenLaterSourceIsInfinite(): void
+    {
+        self::assertTrue(Letters::lower()->merge(Integers::natural())->isInfinite());
     }
 }

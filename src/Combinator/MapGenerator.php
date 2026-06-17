@@ -18,6 +18,11 @@ final class MapGenerator extends AbstractGenerator
         private readonly \Closure $transform,
     ) {}
 
+    public function isInfinite(): bool
+    {
+        return $this->source->isInfinite();
+    }
+
     public function getIterator(): \Generator
     {
         foreach ($this->source->getIterator() as $value) {

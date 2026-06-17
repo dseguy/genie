@@ -9,11 +9,17 @@ use Dseguy\Generator\Combinator\MapGenerator;
 use Dseguy\Generator\Combinator\MergeGenerator;
 use Dseguy\Generator\Combinator\ProductGenerator;
 use Dseguy\Generator\Combinator\RepeatGenerator;
+use Dseguy\Generator\Combinator\TakeGenerator;
 
 abstract class AbstractGenerator implements GeneratorInterface
 {
     /** @return \Generator<int, mixed, void, void> */
     abstract public function getIterator(): \Generator;
+
+    public function isInfinite(): bool
+    {
+        return false;
+    }
 
     public function merge(GeneratorInterface ...$others): GeneratorInterface
     {
@@ -43,6 +49,11 @@ abstract class AbstractGenerator implements GeneratorInterface
     public function repeat(int $n): GeneratorInterface
     {
         return new RepeatGenerator($this, $n);
+    }
+
+    public function take(int $n): GeneratorInterface
+    {
+        return new TakeGenerator($this, $n);
     }
 
     public function toIterator(): \Iterator
